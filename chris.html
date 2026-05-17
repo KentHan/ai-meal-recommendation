@@ -18,14 +18,14 @@
 
         /* 魔方外殼 */
         .cube-container {
-            width: 300px;
-            height: 300px;
+            width: min(300px, calc(100vw - 2.5rem));
+            height: min(300px, calc(100vw - 2.5rem));
             padding: 12px;
             background: #1a1a1a;
             border: 4px solid #333;
             border-radius: 16px;
             box-shadow: 0 25px 60px rgba(0,0,0,0.8);
-            overflow: hidden; 
+            overflow: hidden;
             position: relative;
         }
 
@@ -77,10 +77,10 @@
         }
     </style>
 </head>
-<body class="flex flex-col items-center justify-start min-h-screen p-6 pt-10">
+<body class="flex flex-col items-center justify-start min-h-screen p-4 pt-8 sm:p-6 sm:pt-10">
 
     <div class="text-center mb-8">
-        <h1 class="text-4xl font-black italic tracking-tighter text-blue-500 mb-1">CUBE BREAKFAST</h1>
+        <h1 class="text-3xl sm:text-4xl font-black italic tracking-tighter text-blue-500 mb-1">CUBE BREAKFAST</h1>
         <p class="text-gray-500 text-sm font-bold uppercase tracking-widest">兒子專屬機械魔方</p>
     </div>
 

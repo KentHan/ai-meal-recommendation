@@ -162,6 +162,7 @@
         </div>
     </div>
 
+    <script src="meals.js"></script>
     <script>
         function drawCat(ctx, x, y, size, breakfastType) {
             ctx.save();
@@ -211,7 +212,7 @@
             ctx.restore();
         }
 
-        const optionsBase = ["貝果", "鮪魚蛋吐司", "肉鬆蛋吐司", "穀片", "葡萄乾吐司", "地瓜", "小叮噹蛋糕"];
+        const optionsBase = MEALS.emma;
         let options = [...optionsBase];
         let removedOptions = [];
         let currentRotation = 0;
@@ -270,7 +271,7 @@
                 ctx.save();
                 ctx.translate(center, center);
                 ctx.rotate(angle + arcSize / 2);
-                drawCat(ctx, radius * 0.65, 0, 40, opt); // 選項變多，貓咪稍微縮小一點
+                drawCat(ctx, radius * 0.65, 0, 40, opt);
                 ctx.rotate(Math.PI / 2);
                 ctx.fillStyle = "#ff8fa3";
                 ctx.font = options.length > 8 ? "bold 24px sans-serif" : "bold 28px sans-serif";
@@ -345,14 +346,14 @@
         }
 
         function updateLists() {
-            activeListEl.innerHTML = options.map(item => 
+            activeListEl.innerHTML = options.map(item =>
                 `<li class="list-item flex items-center gap-3 p-3 rounded-2xl shadow-sm">
                     <span class="text-2xl">🐱</span>
                     <span class="font-bold text-gray-600 text-base">${item}</span>
                 </li>`
             ).join('');
 
-            removedListEl.innerHTML = removedOptions.map((item, index) => 
+            removedListEl.innerHTML = removedOptions.map((item, index) =>
                 `<li class="flex justify-between items-center bg-white/50 p-2 px-4 rounded-xl text-gray-300">
                     <span class="line-through text-sm">${item}</span>
                     <button onclick="restoreItem(${index})" class="text-xs bg-pink-50 text-pink-400 px-3 py-1 rounded-full border border-pink-100 active:bg-pink-100">復原</button>

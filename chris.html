@@ -121,14 +121,13 @@
         </div>
     </div>
 
+    <script src="meals.js"></script>
     <script>
-        const breakfastItems = [
-            { text: "貝果", color: "#DC2626" },   // 紅
-            { text: "逼逼波波", color: "#16A34A" }, // 綠
-            { text: "肉鬆蛋吐司", color: "#2563EB" }, // 藍
-            { text: "穀片+2蛋", color: "#CA8A04" }, // 黃
-            { text: "巧克力厚片", color: "#EA580C" } // 橘
-        ];
+        const CHRIS_PALETTE = ["#DC2626", "#16A34A", "#2563EB", "#CA8A04", "#EA580C"];
+        const breakfastItems = MEALS.chris.map((text, i) => ({
+            text,
+            color: CHRIS_PALETTE[i % CHRIS_PALETTE.length]
+        }));
 
         let availableIndices = breakfastItems.map((_, i) => i);
         let isProcessing = false;

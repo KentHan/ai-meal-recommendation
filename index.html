@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>早餐選擇器</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@700;900&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(to right, #121212 50%, #ffeef2 50%);
+      padding: 24px 16px;
+    }
+
+    h1 {
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size: clamp(1.6rem, 5vw, 2.4rem);
+      font-weight: 900;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 40px;
+      letter-spacing: 0.05em;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+      position: relative;
+      z-index: 1;
+    }
+
+    .cards {
+      display: flex;
+      flex-direction: row;
+      gap: 32px;
+      width: 100%;
+      max-width: 720px;
+      justify-content: center;
+    }
+
+    .card {
+      flex: 1;
+      min-width: 0;
+      border-radius: 20px;
+      padding: 36px 24px 32px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      text-decoration: none;
+    }
+
+    .card:hover, .card:focus-visible {
+      transform: translateY(-8px);
+      outline: none;
+    }
+
+    /* Chris card */
+    .card-chris {
+      background: #1a1a1a;
+      border: 2px solid #333;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+    }
+    .card-chris:hover, .card-chris:active {
+      box-shadow: 0 12px 40px rgba(80, 120, 255, 0.4);
+      border-color: #5577ff;
+    }
+
+    /* Emma card */
+    .card-emma {
+      background: #fff0f4;
+      border: 2px solid #ffc0d0;
+      box-shadow: 0 4px 24px rgba(255, 150, 180, 0.2);
+    }
+    .card-emma:hover, .card-emma:active {
+      box-shadow: 0 12px 40px rgba(255, 100, 150, 0.35);
+      border-color: #ff88aa;
+    }
+
+    /* Cube decoration */
+    .cube-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      width: 72px;
+      height: 72px;
+    }
+    .cube-cell {
+      border-radius: 4px;
+    }
+
+    /* Cat decoration */
+    .cat-face {
+      font-size: 64px;
+      line-height: 1;
+    }
+
+    .card-name {
+      font-weight: 900;
+      font-size: clamp(1.3rem, 4vw, 1.7rem);
+      letter-spacing: 0.04em;
+    }
+    .card-chris .card-name {
+      font-family: 'Noto Sans TC', sans-serif;
+      color: #fff;
+    }
+    .card-emma .card-name {
+      font-family: 'ZCOOL KuaiLe', cursive;
+      color: #e05578;
+    }
+
+    .card-desc {
+      font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+      text-align: center;
+      line-height: 1.5;
+    }
+    .card-chris .card-desc {
+      font-family: 'Noto Sans TC', sans-serif;
+      color: #aaa;
+    }
+    .card-emma .card-desc {
+      font-family: 'ZCOOL KuaiLe', cursive;
+      color: #c0607a;
+    }
+
+    .card-btn {
+      margin-top: 8px;
+      padding: 10px 28px;
+      border-radius: 999px;
+      border: none;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 48px;
+      transition: filter 0.15s;
+    }
+    .card-chris .card-btn {
+      font-family: 'Noto Sans TC', sans-serif;
+      background: linear-gradient(135deg, #5577ff, #33aaff);
+      color: #fff;
+    }
+    .card-emma .card-btn {
+      font-family: 'ZCOOL KuaiLe', cursive;
+      background: linear-gradient(135deg, #ff88aa, #ffaac8);
+      color: #fff;
+    }
+    .card:hover .card-btn, .card:active .card-btn {
+      filter: brightness(1.15);
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      body {
+        background: linear-gradient(to bottom, #121212 50%, #ffeef2 50%);
+      }
+      .cards {
+        flex-direction: column;
+        gap: 20px;
+        max-width: 360px;
+      }
+      h1 {
+        margin-bottom: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>🍳 早餐選擇器</h1>
+
+  <div class="cards">
+    <!-- Chris -->
+    <a class="card card-chris" href="chris.html" role="button" tabindex="0">
+      <div class="cube-grid" aria-hidden="true">
+        <div class="cube-cell" style="background:#e53935"></div>
+        <div class="cube-cell" style="background:#1e88e5"></div>
+        <div class="cube-cell" style="background:#43a047"></div>
+        <div class="cube-cell" style="background:#fb8c00"></div>
+        <div class="cube-cell" style="background:#fff"></div>
+        <div class="cube-cell" style="background:#e53935"></div>
+        <div class="cube-cell" style="background:#fdd835"></div>
+        <div class="cube-cell" style="background:#43a047"></div>
+        <div class="cube-cell" style="background:#1e88e5"></div>
+      </div>
+      <div class="card-name">Chris</div>
+      <div class="card-desc">魔術方塊早餐選擇器<br>今天吃什麼，交給命運！</div>
+      <button class="card-btn" tabindex="-1">開始選擇 →</button>
+    </a>
+
+    <!-- Emma -->
+    <a class="card card-emma" href="emma.html" role="button" tabindex="0">
+      <div class="cat-face" aria-hidden="true">🐱</div>
+      <div class="card-name">Emma</div>
+      <div class="card-desc">喵喵早餐輪盤<br>轉轉轉，喵喵幫你選！</div>
+      <button class="card-btn" tabindex="-1">開始選擇 →</button>
+    </a>
+  </div>
+</body>
+</html>

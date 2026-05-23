@@ -591,6 +591,17 @@
             } catch(e) {}
         }
 
+        const emmaMeowAudio = new Audio('cat-meow.mp3');
+        emmaMeowAudio.preload = 'auto';
+        emmaMeowAudio.volume = 0.5;
+
+        function emmaPlayMeow() {
+            try {
+                emmaMeowAudio.currentTime = 0;
+                emmaMeowAudio.play();
+            } catch(e) {}
+        }
+
         function emmaDrawWheel() {
             const size = emmaCanvas.width;
             const center = size / 2;
@@ -666,8 +677,7 @@
                 const adjusted = (360 - actual + 270) % 360;
                 state.emma.selectedIndex = Math.floor(adjusted / arc) % state.emma.options.length;
 
-                emmaPlaySfx(800, 'triangle', 0.3);
-                emmaPlaySfx(1000, 'triangle', 0.5);
+                emmaPlayMeow();
                 emmaShowResult(state.emma.options[state.emma.selectedIndex]);
             }, duration);
         }

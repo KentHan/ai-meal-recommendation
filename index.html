@@ -210,10 +210,14 @@
             touch-action: none;
             user-select: none;
             -webkit-user-drag: none;
+            -webkit-touch-callout: none;
             -webkit-tap-highlight-color: transparent;
         }
         .shower-piece:active { cursor: grabbing; }
         .shower-piece.dragging { opacity: 0.3; }
+        .shower-piece-avatar, .shower-piece-avatar img {
+            -webkit-touch-callout: none;
+        }
         .shower-piece-avatar {
             width: 46px;
             height: 46px;
@@ -1198,19 +1202,23 @@
             const personIdx = parseInt(piece.dataset.personIdx);
             const fromSlot = piece.dataset.fromSlot !== undefined ? parseInt(piece.dataset.fromSlot) : -1;
             const rect = piece.getBoundingClientRect();
+            const isTouch = e.pointerType === 'touch';
+            const ghostTransform = isTouch ? 'translate(-50%, -120%) scale(1.15)' : 'translate(-50%, -50%) scale(1.1)';
 
             const ghost = piece.cloneNode(true);
             ghost.classList.add('shower-drag-ghost');
             ghost.style.left = (rect.left + rect.width / 2) + 'px';
             ghost.style.top = (rect.top + rect.height / 2) + 'px';
-            ghost.style.transform = 'translate(-50%, -50%) scale(1.1)';
+            ghost.style.transform = ghostTransform;
             ghost.style.opacity = '0.92';
-            ghost.style.filter = 'drop-shadow(0 6px 12px rgba(0,0,0,0.2))';
+            ghost.style.filter = 'drop-shadow(0 6px 12px rgba(0,0,0,0.25))';
             document.body.appendChild(ghost);
 
             piece.classList.add('dragging');
 
-            showerState.drag = { personIdx, fromSlot, ghost, pieceEl: piece, pointerId: e.pointerId };
+            try { piece.setPointerCapture(e.pointerId); } catch (err) {}
+
+            showerState.drag = { personIdx, fromSlot, ghost, pieceEl: piece, pointerId: e.pointerId, ghostTransform };
 
             document.addEventListener('pointermove', showerOnPointerMove);
             document.addEventListener('pointerup', showerOnPointerUp);

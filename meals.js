@@ -7,3 +7,10 @@ window.USERS = {
     chris: { label: 'Chris', emoji: '🧊' },
     emma:  { label: 'Emma',  emoji: '🐱' }
 };
+
+window.SHOWER_PEOPLE = [
+    { name: 'Chris', color: '#3B82F6', image: 'chris.PNG' },
+    { name: 'Emma',  color: '#EC4899', image: 'emma.JPG'  },
+    { name: 'Lana',  color: '#A855F7', image: 'lana.JPG'  },
+    { name: 'Kent',  color: '#F59E0B', image: 'kent.jpeg' }
+];

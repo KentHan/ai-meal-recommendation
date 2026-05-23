@@ -41,8 +41,19 @@
             padding: 0;
         }
 
-        body[data-user="chris"] .emma-only { display: none !important; }
-        body[data-user="emma"]  .chris-only { display: none !important; }
+        body[data-user="chris"] .emma-only,
+        body[data-user="chris"] .shower-only { display: none !important; }
+        body[data-user="emma"]  .chris-only,
+        body[data-user="emma"]  .shower-only { display: none !important; }
+        body[data-user="shower"] .chris-only,
+        body[data-user="shower"] .emma-only { display: none !important; }
+
+        body[data-user="shower"] {
+            background: linear-gradient(180deg, #e0f2fe 0%, #bae6fd 100%);
+            font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+            padding: 1rem;
+            padding-top: 1.5rem;
+        }
 
         /* ========== User toggle ========== */
         .user-toggle {
@@ -84,6 +95,245 @@
             background: #ff9aaf;
             color: white;
             box-shadow: 0 4px 10px rgba(255, 154, 175, 0.4);
+        }
+        body[data-user="shower"] .user-toggle {
+            background: white;
+            border: 2px solid #bae6fd;
+            margin-top: 8px;
+            box-shadow: 0 4px 12px rgba(125, 211, 252, 0.2);
+        }
+        body[data-user="shower"] .user-toggle button { color: #0369a1; }
+        body[data-user="shower"] .user-toggle button.active {
+            background: #0ea5e9;
+            color: white;
+            box-shadow: 0 4px 10px rgba(14, 165, 233, 0.4);
+        }
+
+        /* ========== Shower-only ========== */
+        .shower-container {
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 28px;
+            border: 4px solid #bae6fd;
+            padding: 18px;
+            box-shadow: 0 10px 30px rgba(56, 189, 248, 0.18);
+        }
+        .shower-title {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: #0284c7;
+            text-align: center;
+            letter-spacing: 2px;
+            margin-bottom: 2px;
+        }
+        .shower-subtitle {
+            font-size: 0.8rem;
+            color: #0ea5e9;
+            text-align: center;
+            margin-bottom: 14px;
+            font-weight: 600;
+        }
+        .shower-pool {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            min-height: 84px;
+            padding: 10px;
+            background: #f0f9ff;
+            border: 2px dashed #bae6fd;
+            border-radius: 16px;
+            margin-bottom: 8px;
+            transition: all 0.2s ease;
+        }
+        .shower-pool.drag-over {
+            background: #fef3c7;
+            border-color: #fbbf24;
+        }
+        .shower-pool-empty {
+            color: #94a3b8;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+        .shower-slots {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+        }
+        .shower-slot {
+            height: 94px;
+            background: white;
+            border: 2px dashed #bae6fd;
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        .shower-slot.filled {
+            background: #f0f9ff;
+            border-style: solid;
+            border-color: #0ea5e9;
+        }
+        .shower-slot.drag-over {
+            background: #fef3c7;
+            border-color: #fbbf24;
+            transform: scale(1.04);
+        }
+        .shower-slot-num {
+            position: absolute;
+            top: 5px;
+            left: 8px;
+            font-size: 0.8rem;
+            font-weight: 900;
+            color: #94a3b8;
+            line-height: 1;
+        }
+        .shower-slot.filled .shower-slot-num { color: #0ea5e9; }
+        .shower-slot-hint {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+        .shower-piece {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            cursor: grab;
+            touch-action: none;
+            user-select: none;
+            -webkit-user-drag: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .shower-piece:active { cursor: grabbing; }
+        .shower-piece.dragging { opacity: 0.3; }
+        .shower-piece-avatar {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+            border: 3px solid white;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+            overflow: hidden;
+        }
+        .shower-piece-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+        .shower-piece-name {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: #475569;
+        }
+        .shower-drag-ghost {
+            position: fixed;
+            z-index: 1000;
+            pointer-events: none;
+            transition: none;
+        }
+        #showerLadder {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .shower-start-btn {
+            width: 100%;
+            margin-top: 14px;
+            padding: 16px;
+            background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
+            color: white;
+            font-weight: 900;
+            font-size: 1.15rem;
+            border: none;
+            border-radius: 18px;
+            box-shadow: 0 6px 18px rgba(14, 165, 233, 0.4);
+            cursor: pointer;
+            touch-action: manipulation;
+            transition: all 0.2s ease;
+        }
+        .shower-start-btn:active { transform: scale(0.98); }
+        .shower-start-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .shower-result-card {
+            margin-top: 14px;
+            padding: 14px;
+            background: #f0f9ff;
+            border-radius: 18px;
+            border: 2px solid #bae6fd;
+        }
+        .shower-result-title {
+            text-align: center;
+            font-weight: 900;
+            color: #0369a1;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        .shower-result-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            border-radius: 12px;
+            margin-bottom: 6px;
+            background: white;
+            border: 1px solid #e0f2fe;
+        }
+        .shower-result-row.rank-1 {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 2px solid #fbbf24;
+        }
+        .shower-rank-num {
+            font-weight: 900;
+            min-width: 28px;
+            text-align: center;
+            font-size: 1.1rem;
+            color: #0369a1;
+        }
+        .shower-result-row.rank-1 .shower-rank-num { color: #b45309; }
+        .shower-result-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+            border: 2px solid white;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .shower-result-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .shower-result-name {
+            font-weight: 800;
+            color: #1e293b;
+        }
+        .shower-hint {
+            text-align: center;
+            color: #64748b;
+            font-size: 0.75rem;
+            margin-top: 8px;
         }
 
         /* ========== Chris-only ========== */
@@ -210,6 +460,7 @@
     <div class="user-toggle">
         <button data-user-btn="chris">🧊 Chris</button>
         <button data-user-btn="emma">🐱 Emma</button>
+        <button data-user-btn="shower">🛁 洗澡</button>
     </div>
 
     <!-- ================= Chris ================= -->
@@ -310,6 +561,22 @@
                 </button>
             </div>
         </div>
+    </div>
+
+    <!-- ================= Shower ================= -->
+    <div class="shower-only shower-container">
+        <h1 class="shower-title">🛁 洗澡爬格子</h1>
+        <p class="shower-subtitle">把頭像拖到下方 1 / 2 / 3 / 4 起跑點～</p>
+
+        <div id="showerInteractive">
+            <div class="shower-pool" id="showerPool"></div>
+            <div class="shower-slots" id="showerSlots"></div>
+        </div>
+        <svg id="showerLadder" viewBox="0 0 360 420" xmlns="http://www.w3.org/2000/svg"></svg>
+
+        <button id="showerStartBtn" class="shower-start-btn" onclick="showerButtonAction()" disabled>還缺 4 個就位</button>
+
+        <div id="showerResultCard" class="shower-result-card hidden"></div>
     </div>
 
     <script src="meals.js"></script>
@@ -724,10 +991,456 @@
 
         emmaSpinBtn.addEventListener('click', emmaSpin);
 
+        // ========== Shower ==========
+        const SHOWER_CONFIG = {
+            cols: 4,
+            levels: 14,
+            width: 360,
+            height: 420,
+            avatarY: 24,
+            avatarR: 20,
+            bottomPad: 24
+        };
+
+        let showerGeom = null;
+        const showerState = {
+            rungs: [],
+            isRunning: false,
+            hasPlayed: false,
+            avatarEls: [],
+            pool: [0, 1, 2, 3],
+            slots: [null, null, null, null],
+            drag: null
+        };
+
+        function showerComputeGeom() {
+            const colSpacing = SHOWER_CONFIG.width / SHOWER_CONFIG.cols;
+            const colXs = [];
+            for (let i = 0; i < SHOWER_CONFIG.cols; i++) {
+                colXs.push(colSpacing / 2 + i * colSpacing);
+            }
+            const lineTopY = SHOWER_CONFIG.avatarY;
+            const lineBottomY = SHOWER_CONFIG.height - SHOWER_CONFIG.bottomPad;
+            const rungSpacing = (lineBottomY - lineTopY) / (SHOWER_CONFIG.levels + 1);
+            const rungYs = [];
+            for (let i = 0; i < SHOWER_CONFIG.levels; i++) {
+                rungYs.push(lineTopY + (i + 1) * rungSpacing);
+            }
+            showerGeom = { colXs, rungYs, lineTopY, lineBottomY };
+        }
+
+        function showerGenerateRungs() {
+            const rungs = [];
+            const numGaps = SHOWER_CONFIG.cols - 1;
+            for (let l = 0; l < SHOWER_CONFIG.levels; l++) {
+                const row = new Array(numGaps).fill(false);
+                for (let g = 0; g < numGaps; g++) {
+                    if (g > 0 && row[g - 1]) continue;
+                    if (Math.random() < 0.5) row[g] = true;
+                }
+                rungs.push(row);
+            }
+            showerState.rungs = rungs;
+        }
+
+        function showerDrawLadder(withAvatars = false) {
+            const svg = document.getElementById('showerLadder');
+            const { colXs, rungYs, lineTopY, lineBottomY } = showerGeom;
+            const parts = [];
+            colXs.forEach(x => {
+                parts.push(`<line x1="${x}" y1="${lineTopY}" x2="${x}" y2="${lineBottomY}" stroke="#7dd3fc" stroke-width="4" stroke-linecap="round"/>`);
+            });
+            showerState.rungs.forEach((row, l) => {
+                row.forEach((on, g) => {
+                    if (on) {
+                        const y = rungYs[l];
+                        parts.push(`<line x1="${colXs[g]}" y1="${y}" x2="${colXs[g+1]}" y2="${y}" stroke="#7dd3fc" stroke-width="4" stroke-linecap="round"/>`);
+                    }
+                });
+            });
+            if (withAvatars) {
+                parts.push('<defs><clipPath id="showerCircleClip" clipPathUnits="objectBoundingBox"><circle cx="0.5" cy="0.5" r="0.5"/></clipPath></defs>');
+                for (let i = 0; i < SHOWER_CONFIG.cols; i++) {
+                    const personIdx = showerState.slots[i];
+                    if (personIdx === null) continue;
+                    const p = SHOWER_PEOPLE[personIdx];
+                    const x = colXs[i];
+                    const y = SHOWER_CONFIG.avatarY;
+                    const r = SHOWER_CONFIG.avatarR;
+                    parts.push(`<g class="shower-avatar" data-idx="${i}">
+                        <image href="${p.image}" x="${x-r}" y="${y-r}" width="${2*r}" height="${2*r}" preserveAspectRatio="xMidYMid slice" clip-path="url(#showerCircleClip)"/>
+                        <circle cx="${x}" cy="${y}" r="${r}" fill="none" stroke="white" stroke-width="3"/>
+                    </g>`);
+                }
+            }
+            svg.innerHTML = parts.join('');
+            showerState.avatarEls = svg.querySelectorAll('.shower-avatar');
+        }
+
+        function showerRenderPool() {
+            const el = document.getElementById('showerPool');
+            if (showerState.pool.length === 0) {
+                el.innerHTML = '<div class="shower-pool-empty">全員就位 ✨</div>';
+                return;
+            }
+            el.innerHTML = showerState.pool.map(idx => {
+                const p = SHOWER_PEOPLE[idx];
+                return `
+                    <div class="shower-piece" data-person-idx="${idx}">
+                        <div class="shower-piece-avatar" style="background-color:${p.color}"><img src="${p.image}" alt="${p.name}" draggable="false"></div>
+                        <div class="shower-piece-name">${p.name}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function showerRenderSlots() {
+            document.getElementById('showerSlots').innerHTML = showerState.slots.map((personIdx, slotIdx) => {
+                const num = slotIdx + 1;
+                if (personIdx === null) {
+                    return `
+                        <div class="shower-slot" data-slot="${slotIdx}">
+                            <div class="shower-slot-num">${num}</div>
+                            <div class="shower-slot-hint">拖人來</div>
+                        </div>
+                    `;
+                }
+                const p = SHOWER_PEOPLE[personIdx];
+                return `
+                    <div class="shower-slot filled" data-slot="${slotIdx}">
+                        <div class="shower-slot-num">${num}</div>
+                        <div class="shower-piece" data-person-idx="${personIdx}" data-from-slot="${slotIdx}">
+                            <div class="shower-piece-avatar" style="background-color:${p.color}"><img src="${p.image}" alt="${p.name}" draggable="false"></div>
+                            <div class="shower-piece-name">${p.name}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function showerAllPlaced() {
+            return showerState.slots.every(s => s !== null);
+        }
+
+        function showerUpdateStartBtn() {
+            const btn = document.getElementById('showerStartBtn');
+            if (showerState.isRunning) return;
+            if (showerState.hasPlayed) {
+                btn.disabled = false;
+                btn.innerText = '重置 🔄';
+            } else if (showerAllPlaced()) {
+                btn.disabled = false;
+                btn.innerText = '開始爬格子！🚿';
+            } else {
+                const need = showerState.slots.filter(s => s === null).length;
+                btn.disabled = true;
+                btn.innerText = `還缺 ${need} 個就位`;
+            }
+        }
+
+        function showerClearResults() {
+            document.getElementById('showerResultCard').classList.add('hidden');
+        }
+
+        function showerButtonAction() {
+            if (showerState.isRunning) return;
+            if (showerState.hasPlayed) {
+                showerReset();
+            } else {
+                showerStart();
+            }
+        }
+
+        function showerReset() {
+            showerState.pool = [0, 1, 2, 3];
+            showerState.slots = [null, null, null, null];
+            showerState.hasPlayed = false;
+            showerClearResults();
+            showerDrawLadder();
+            showerRenderPool();
+            showerRenderSlots();
+            showerUpdateStartBtn();
+        }
+
+        function showerHandleDrop(personIdx, fromSlot, target) {
+            if (!target) return;
+            if (target.type === 'slot') {
+                const tIdx = target.idx;
+                const existing = showerState.slots[tIdx];
+                if (existing === personIdx) return;
+                if (fromSlot === -1) {
+                    const i = showerState.pool.indexOf(personIdx);
+                    if (i >= 0) showerState.pool.splice(i, 1);
+                } else {
+                    showerState.slots[fromSlot] = null;
+                }
+                if (existing !== null) {
+                    if (fromSlot !== -1) {
+                        showerState.slots[fromSlot] = existing;
+                    } else {
+                        showerState.pool.push(existing);
+                    }
+                }
+                showerState.slots[tIdx] = personIdx;
+            } else if (target.type === 'pool') {
+                if (fromSlot === -1) return;
+                showerState.slots[fromSlot] = null;
+                showerState.pool.push(personIdx);
+            }
+        }
+
+        function showerOnPointerDown(e) {
+            if (showerState.isRunning) return;
+            const piece = e.target.closest('.shower-piece');
+            if (!piece) return;
+            e.preventDefault();
+
+            const personIdx = parseInt(piece.dataset.personIdx);
+            const fromSlot = piece.dataset.fromSlot !== undefined ? parseInt(piece.dataset.fromSlot) : -1;
+            const rect = piece.getBoundingClientRect();
+
+            const ghost = piece.cloneNode(true);
+            ghost.classList.add('shower-drag-ghost');
+            ghost.style.left = (rect.left + rect.width / 2) + 'px';
+            ghost.style.top = (rect.top + rect.height / 2) + 'px';
+            ghost.style.transform = 'translate(-50%, -50%) scale(1.1)';
+            ghost.style.opacity = '0.92';
+            ghost.style.filter = 'drop-shadow(0 6px 12px rgba(0,0,0,0.2))';
+            document.body.appendChild(ghost);
+
+            piece.classList.add('dragging');
+
+            showerState.drag = { personIdx, fromSlot, ghost, pieceEl: piece, pointerId: e.pointerId };
+
+            document.addEventListener('pointermove', showerOnPointerMove);
+            document.addEventListener('pointerup', showerOnPointerUp);
+            document.addEventListener('pointercancel', showerOnPointerUp);
+        }
+
+        function showerOnPointerMove(e) {
+            if (!showerState.drag) return;
+            if (e.pointerId !== undefined && e.pointerId !== showerState.drag.pointerId) return;
+            e.preventDefault();
+
+            const ghost = showerState.drag.ghost;
+            ghost.style.left = e.clientX + 'px';
+            ghost.style.top = e.clientY + 'px';
+
+            document.querySelectorAll('.shower-slot.drag-over, .shower-pool.drag-over').forEach(el => el.classList.remove('drag-over'));
+            const elAt = document.elementFromPoint(e.clientX, e.clientY);
+            if (elAt) {
+                const slot = elAt.closest('.shower-slot');
+                const pool = elAt.closest('.shower-pool');
+                if (slot) slot.classList.add('drag-over');
+                else if (pool && showerState.drag.fromSlot !== -1) pool.classList.add('drag-over');
+            }
+        }
+
+        function showerOnPointerUp(e) {
+            if (!showerState.drag) return;
+            if (e.pointerId !== undefined && e.pointerId !== showerState.drag.pointerId) return;
+
+            const { personIdx, fromSlot, ghost, pieceEl } = showerState.drag;
+            ghost.remove();
+            pieceEl.classList.remove('dragging');
+            document.querySelectorAll('.shower-slot.drag-over, .shower-pool.drag-over').forEach(el => el.classList.remove('drag-over'));
+
+            const elAt = document.elementFromPoint(e.clientX, e.clientY);
+            let target = null;
+            if (elAt) {
+                const slot = elAt.closest('.shower-slot');
+                const pool = elAt.closest('.shower-pool');
+                if (slot) target = { type: 'slot', idx: parseInt(slot.dataset.slot) };
+                else if (pool) target = { type: 'pool' };
+            }
+
+            showerHandleDrop(personIdx, fromSlot, target);
+
+            showerState.drag = null;
+            document.removeEventListener('pointermove', showerOnPointerMove);
+            document.removeEventListener('pointerup', showerOnPointerUp);
+            document.removeEventListener('pointercancel', showerOnPointerUp);
+
+            if (showerState.hasPlayed) {
+                showerState.hasPlayed = false;
+                showerDrawLadder();
+            }
+            showerRenderPool();
+            showerRenderSlots();
+            showerClearResults();
+            showerUpdateStartBtn();
+        }
+
+        function showerTracePath(startCol) {
+            const { colXs, rungYs, lineBottomY } = showerGeom;
+            const pts = [{ x: colXs[startCol], y: SHOWER_CONFIG.avatarY }];
+            let col = startCol;
+            for (let l = 0; l < SHOWER_CONFIG.levels; l++) {
+                const y = rungYs[l];
+                if (col > 0 && showerState.rungs[l][col - 1]) {
+                    pts.push({ x: colXs[col], y });
+                    col -= 1;
+                    pts.push({ x: colXs[col], y });
+                } else if (col < SHOWER_CONFIG.cols - 1 && showerState.rungs[l][col]) {
+                    pts.push({ x: colXs[col], y });
+                    col += 1;
+                    pts.push({ x: colXs[col], y });
+                }
+            }
+            pts.push({ x: colXs[col], y: lineBottomY });
+            return { points: pts, finalCol: col };
+        }
+
+        function showerAnimateAvatar(el, points, totalDur) {
+            const image = el.querySelector('image');
+            const circle = el.querySelector('circle');
+            const r = SHOWER_CONFIG.avatarR;
+            const setPos = (x, y) => {
+                image.setAttribute('x', x - r);
+                image.setAttribute('y', y - r);
+                circle.setAttribute('cx', x);
+                circle.setAttribute('cy', y);
+            };
+
+            let totalLen = 0;
+            const segLens = [];
+            for (let i = 1; i < points.length; i++) {
+                const dx = points[i].x - points[i-1].x;
+                const dy = points[i].y - points[i-1].y;
+                const len = Math.sqrt(dx*dx + dy*dy) || 0.001;
+                segLens.push(len);
+                totalLen += len;
+            }
+            const cum = [0];
+            segLens.forEach(l => cum.push(cum[cum.length-1] + (l/totalLen) * totalDur));
+
+            return new Promise(resolve => {
+                const start = performance.now();
+                function frame(now) {
+                    const elapsed = now - start;
+                    if (elapsed >= totalDur) {
+                        const last = points[points.length-1];
+                        setPos(last.x, last.y);
+                        return resolve();
+                    }
+                    let segIdx = 0;
+                    for (let i = 1; i < cum.length; i++) {
+                        if (elapsed < cum[i]) { segIdx = i - 1; break; }
+                    }
+                    const t = (elapsed - cum[segIdx]) / (cum[segIdx+1] - cum[segIdx]);
+                    const from = points[segIdx];
+                    const to = points[segIdx + 1];
+                    setPos(from.x + (to.x - from.x) * t, from.y + (to.y - from.y) * t);
+                    requestAnimationFrame(frame);
+                }
+                requestAnimationFrame(frame);
+            });
+        }
+
+        function showerPlayTick() {
+            initAudio();
+            const t = audioCtx.currentTime;
+            const osc = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(900 + Math.random() * 400, t);
+            g.gain.setValueAtTime(0.04, t);
+            g.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+            osc.connect(g); g.connect(audioCtx.destination);
+            osc.start(t); osc.stop(t + 0.12);
+        }
+
+        function showerPlaySplash() {
+            initAudio();
+            const t0 = audioCtx.currentTime;
+            [523, 659, 784, 1047].forEach((freq, i) => {
+                const osc = audioCtx.createOscillator();
+                const g = audioCtx.createGain();
+                osc.type = 'sine';
+                const start = t0 + i * 0.09;
+                osc.frequency.setValueAtTime(freq, start);
+                g.gain.setValueAtTime(0.12, start);
+                g.gain.exponentialRampToValueAtTime(0.001, start + 0.4);
+                osc.connect(g); g.connect(audioCtx.destination);
+                osc.start(start); osc.stop(start + 0.45);
+            });
+        }
+
+        async function showerStart() {
+            if (showerState.isRunning || !showerAllPlaced()) return;
+            showerState.isRunning = true;
+            initAudio();
+
+            showerClearResults();
+
+            const btn = document.getElementById('showerStartBtn');
+            btn.disabled = true;
+            btn.innerText = '爬格子中...🫧';
+
+            showerGenerateRungs();
+            showerDrawLadder(true);
+            document.querySelectorAll('.shower-slot .shower-piece').forEach(p => {
+                p.style.visibility = 'hidden';
+            });
+
+            await new Promise(r => setTimeout(r, 60));
+
+            const results = [];
+            const totalDur = 3200;
+            const animPromises = [];
+            for (let i = 0; i < SHOWER_CONFIG.cols; i++) {
+                const personIdx = showerState.slots[i];
+                const person = SHOWER_PEOPLE[personIdx];
+                const trace = showerTracePath(i);
+                results.push({ person, finalCol: trace.finalCol });
+                animPromises.push(showerAnimateAvatar(showerState.avatarEls[i], trace.points, totalDur));
+            }
+
+            const tickTimer = setInterval(showerPlayTick, 180);
+            await Promise.all(animPromises);
+            clearInterval(tickTimer);
+
+            showerShowResults(results);
+            showerPlaySplash();
+
+            document.querySelectorAll('.shower-slot .shower-piece').forEach(p => {
+                p.style.visibility = 'visible';
+            });
+
+            showerState.isRunning = false;
+            showerState.hasPlayed = true;
+            showerUpdateStartBtn();
+        }
+
+        function showerShowResults(results) {
+            const ranked = [...results].sort((a, b) => a.finalCol - b.finalCol);
+            const card = document.getElementById('showerResultCard');
+            card.innerHTML = `<div class="shower-result-title">🎉 洗澡順序公布！</div>` +
+                ranked.map((r, idx) => `
+                    <div class="shower-result-row rank-${idx+1}">
+                        <div class="shower-rank-num">${idx+1}</div>
+                        <div class="shower-result-avatar" style="background-color:${r.person.color}"><img src="${r.person.image}" alt="${r.person.name}"></div>
+                        <div class="shower-result-name">${r.person.name}</div>
+                    </div>
+                `).join('');
+            card.classList.remove('hidden');
+        }
+
+        function showerInit() {
+            showerComputeGeom();
+            showerGenerateRungs();
+            showerDrawLadder();
+            showerRenderPool();
+            showerRenderSlots();
+            showerUpdateStartBtn();
+            document.getElementById('showerInteractive').addEventListener('pointerdown', showerOnPointerDown);
+        }
+
         // ========== Init ==========
         chrisRenderList();
         emmaDrawWheel();
         emmaUpdateLists();
+        showerInit();
         setUser('chris');
 
         document.querySelectorAll('[data-user-btn]').forEach(btn =>

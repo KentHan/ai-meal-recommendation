@@ -584,6 +584,14 @@
     </div>
 
     <script src="meals.js"></script>
+    <script type="module">
+        // Eagerly load new shared modules so any module-load failure surfaces immediately.
+        // We don't replace the legacy meals.js globals yet — the inline classic script below
+        // is synchronous and runs before deferred modules execute. Migration to per-feature
+        // modules happens in later tasks.
+        import './shared/data.js';
+        import './shared/audio.js';
+    </script>
     <script>
         // ========== Shared audio ==========
         let audioCtx;

@@ -5,23 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>早餐選擇器</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="shared/style.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@700;900&family=ZCOOL+KuaiLe&display=swap');
-
-        /* ========== Shared ========== */
-        * { box-sizing: border-box; }
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            overflow-x: hidden;
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
-        }
-
         body[data-user="chris"] {
             background-color: #121212;
             color: white;
@@ -40,73 +25,11 @@
             font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
             padding: 0;
         }
-
-        body[data-user="chris"] .emma-only,
-        body[data-user="chris"] .shower-only { display: none !important; }
-        body[data-user="emma"]  .chris-only,
-        body[data-user="emma"]  .shower-only { display: none !important; }
-        body[data-user="shower"] .chris-only,
-        body[data-user="shower"] .emma-only { display: none !important; }
-
         body[data-user="shower"] {
             background: linear-gradient(180deg, #e0f2fe 0%, #bae6fd 100%);
             font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
             padding: 1rem;
             padding-top: 1.5rem;
-        }
-
-        /* ========== User toggle ========== */
-        .user-toggle {
-            display: inline-flex;
-            gap: 4px;
-            padding: 4px;
-            border-radius: 9999px;
-            margin: 0 auto 20px;
-            z-index: 30;
-        }
-        .user-toggle button {
-            padding: 8px 18px;
-            border-radius: 9999px;
-            border: none;
-            font-weight: 700;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.2s ease;
-            background: transparent;
-        }
-        body[data-user="chris"] .user-toggle {
-            background: #1a1a1a;
-            border: 2px solid #333;
-        }
-        body[data-user="chris"] .user-toggle button { color: #888; }
-        body[data-user="chris"] .user-toggle button.active {
-            background: #2563EB;
-            color: white;
-            box-shadow: 0 0 12px rgba(37, 99, 235, 0.5);
-        }
-        body[data-user="emma"] .user-toggle {
-            background: white;
-            border: 2px solid #ffdee7;
-            margin-top: 16px;
-            box-shadow: 0 4px 12px rgba(255, 174, 188, 0.15);
-        }
-        body[data-user="emma"] .user-toggle button { color: #c0607a; }
-        body[data-user="emma"] .user-toggle button.active {
-            background: #ff9aaf;
-            color: white;
-            box-shadow: 0 4px 10px rgba(255, 154, 175, 0.4);
-        }
-        body[data-user="shower"] .user-toggle {
-            background: white;
-            border: 2px solid #bae6fd;
-            margin-top: 8px;
-            box-shadow: 0 4px 12px rgba(125, 211, 252, 0.2);
-        }
-        body[data-user="shower"] .user-toggle button { color: #0369a1; }
-        body[data-user="shower"] .user-toggle button.active {
-            background: #0ea5e9;
-            color: white;
-            box-shadow: 0 4px 10px rgba(14, 165, 233, 0.4);
         }
 
         /* ========== Shower-only ========== */
@@ -460,12 +383,11 @@
 </head>
 <body data-user="chris">
 
-    <!-- User toggle -->
-    <div class="user-toggle">
-        <button data-user-btn="chris">🧊 Chris</button>
-        <button data-user-btn="emma">🐱 Emma</button>
-        <button data-user-btn="shower">🛁 洗澡</button>
-    </div>
+    <!-- User toggle (populated by app.js) -->
+    <div class="user-toggle"></div>
+
+    <!-- Feature mount point (populated by app.js as features are migrated) -->
+    <div id="app"></div>
 
     <!-- ================= Chris ================= -->
     <div class="chris-only text-center mb-8">
@@ -584,14 +506,7 @@
     </div>
 
     <script src="meals.js"></script>
-    <script type="module">
-        // Eagerly load new shared modules so any module-load failure surfaces immediately.
-        // We don't replace the legacy meals.js globals yet — the inline classic script below
-        // is synchronous and runs before deferred modules execute. Migration to per-feature
-        // modules happens in later tasks.
-        import './shared/data.js';
-        import './shared/audio.js';
-    </script>
+    <script type="module" src="app.js"></script>
     <script>
         // ========== Shared audio ==========
         let audioCtx;
@@ -601,7 +516,6 @@
         }
 
         // ========== State ==========
-        let currentUser = 'chris';
         const CHRIS_PALETTE = ["#DC2626", "#16A34A", "#2563EB", "#CA8A04", "#EA580C"];
         const state = {
             chris: {
@@ -620,15 +534,6 @@
                 selectedIndex: -1
             }
         };
-
-        // ========== User toggle ==========
-        function setUser(name) {
-            currentUser = name;
-            document.body.dataset.user = name;
-            document.querySelectorAll('[data-user-btn]').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.userBtn === name);
-            });
-        }
 
         // ========== Chris ==========
         function chrisPlaySound(type) {
@@ -1457,11 +1362,6 @@
         emmaDrawWheel();
         emmaUpdateLists();
         showerInit();
-        setUser('chris');
-
-        document.querySelectorAll('[data-user-btn]').forEach(btn =>
-            btn.addEventListener('click', () => setUser(btn.dataset.userBtn))
-        );
     </script>
 </body>
 </html>

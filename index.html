@@ -6,20 +6,8 @@
     <title>早餐選擇器</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="shared/style.css">
+    <link rel="stylesheet" href="features/chris/style.css">
     <style>
-        body[data-user="chris"] {
-            background-color: #121212;
-            color: white;
-            font-family: 'Noto Sans TC', sans-serif;
-            padding: 1rem;
-            padding-top: 1.5rem;
-        }
-        @media (min-width: 640px) {
-            body[data-user="chris"] {
-                padding: 1.5rem;
-                padding-top: 2rem;
-            }
-        }
         body[data-user="emma"] {
             background-color: #ffeef2;
             font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
@@ -263,59 +251,6 @@
             margin-top: 8px;
         }
 
-        /* ========== Chris-only ========== */
-        .cube-container {
-            width: min(300px, calc(100vw - 2.5rem));
-            height: min(300px, calc(100vw - 2.5rem));
-            padding: 12px;
-            background: #1a1a1a;
-            border: 4px solid #333;
-            border-radius: 16px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.8);
-            overflow: hidden;
-            position: relative;
-        }
-        .cube-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: repeat(3, 1fr);
-            gap: 10px;
-            width: 100%;
-            height: 100%;
-            position: relative;
-        }
-        .cube-cell {
-            background-color: #333;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            font-weight: 900;
-            color: #000;
-            text-align: center;
-            transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s;
-            position: relative;
-            box-shadow: inset 0 0 12px rgba(0,0,0,0.5), 0 2px 4px rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .option-tag {
-            transition: all 0.3s ease;
-        }
-        .option-tag.removed {
-            opacity: 0.2;
-            text-decoration: line-through;
-            transform: scale(0.9);
-            filter: grayscale(1);
-        }
-        .confetti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            z-index: 100;
-            pointer-events: none;
-        }
-
         /* ========== Emma-only ========== */
         .main-wrapper {
             width: 100%;
@@ -388,44 +323,6 @@
 
     <!-- Feature mount point (populated by app.js as features are migrated) -->
     <div id="app"></div>
-
-    <!-- ================= Chris ================= -->
-    <div class="chris-only text-center mb-8">
-        <h1 class="text-3xl sm:text-4xl font-black italic tracking-tighter text-blue-500 mb-1">CUBE BREAKFAST</h1>
-        <p class="text-gray-500 text-sm font-bold uppercase tracking-widest">兒子專屬機械魔方</p>
-    </div>
-
-    <div class="chris-only mb-8 w-full max-w-sm">
-        <div class="flex justify-between items-end mb-3 px-1">
-            <h2 class="text-lg font-black text-white border-b-2 border-blue-500">今日選單</h2>
-            <button onclick="chrisResetOptions()" class="text-[10px] font-bold text-gray-400 border border-gray-700 px-2 py-1 rounded hover:bg-gray-800 transition">重置進度</button>
-        </div>
-        <div id="chrisStatusList" class="flex flex-wrap gap-2 justify-center"></div>
-    </div>
-
-    <div class="chris-only cube-container mb-6" id="chrisCubeTrigger" onclick="chrisStartSelection()">
-        <div id="chrisCubeGrid" class="cube-grid cursor-pointer">
-            <div id="chris-cell-0" class="cube-cell bg-red-600"></div>
-            <div id="chris-cell-1" class="cube-cell bg-blue-600"></div>
-            <div id="chris-cell-2" class="cube-cell bg-green-600"></div>
-            <div id="chris-cell-3" class="cube-cell bg-orange-600"></div>
-            <div id="chris-cell-4" class="cube-cell bg-yellow-500"></div>
-            <div id="chris-cell-5" class="cube-cell bg-slate-100"></div>
-            <div id="chris-cell-6" class="cube-cell bg-red-600"></div>
-            <div id="chris-cell-7" class="cube-cell bg-blue-600"></div>
-            <div id="chris-cell-8" class="cube-cell bg-green-600"></div>
-        </div>
-    </div>
-    <p class="chris-only text-center text-gray-600 text-xs font-bold animate-bounce">點擊方塊啟動引擎！</p>
-
-    <div id="chrisModal" class="chris-only fixed inset-0 bg-black/95 flex items-center justify-center z-50 hidden p-6 backdrop-blur-md">
-        <div class="bg-gray-900 border-2 border-blue-500 p-8 rounded-2xl text-center max-w-sm w-full shadow-[0_0_50px_rgba(59,130,246,0.3)]">
-            <div id="chrisModalColorStrip" class="h-2 w-16 mx-auto rounded-full mb-6"></div>
-            <p class="text-gray-400 font-bold mb-2 tracking-widest text-xs uppercase">Target Acquired</p>
-            <h3 id="chrisResultText" class="text-4xl font-black mb-8 text-white tracking-tight"></h3>
-            <button onclick="chrisCloseModal()" class="w-full bg-blue-600 text-white font-black py-4 rounded-xl hover:bg-blue-500 transition text-lg shadow-lg">準備開動</button>
-        </div>
-    </div>
 
     <!-- ================= Emma ================= -->
     <div class="emma-only main-wrapper">
@@ -516,16 +413,7 @@
         }
 
         // ========== State ==========
-        const CHRIS_PALETTE = ["#DC2626", "#16A34A", "#2563EB", "#CA8A04", "#EA580C"];
         const state = {
-            chris: {
-                breakfastItems: MEALS.chris.map((text, i) => ({
-                    text,
-                    color: CHRIS_PALETTE[i % CHRIS_PALETTE.length]
-                })),
-                availableIndices: MEALS.chris.map((_, i) => i),
-                isProcessing: false
-            },
             emma: {
                 options: [...MEALS.emma],
                 removedOptions: [],
@@ -534,176 +422,6 @@
                 selectedIndex: -1
             }
         };
-
-        // ========== Chris ==========
-        function chrisPlaySound(type) {
-            initAudio();
-            const startTime = audioCtx.currentTime;
-
-            if (type === 'tick') {
-                const osc1 = audioCtx.createOscillator();
-                const gain1 = audioCtx.createGain();
-                osc1.type = 'square';
-                osc1.frequency.setValueAtTime(120, startTime);
-                osc1.frequency.linearRampToValueAtTime(40, startTime + 0.08);
-                gain1.gain.setValueAtTime(0.08, startTime);
-                gain1.gain.exponentialRampToValueAtTime(0.001, startTime + 0.08);
-                osc1.connect(gain1);
-                gain1.connect(audioCtx.destination);
-                osc1.start(startTime);
-                osc1.stop(startTime + 0.08);
-
-                const osc2 = audioCtx.createOscillator();
-                const gain2 = audioCtx.createGain();
-                osc2.type = 'triangle';
-                osc2.frequency.setValueAtTime(800, startTime);
-                gain2.gain.setValueAtTime(0.02, startTime);
-                gain2.gain.exponentialRampToValueAtTime(0.001, startTime + 0.04);
-                osc2.connect(gain2);
-                gain2.connect(audioCtx.destination);
-                osc2.start(startTime);
-                osc2.stop(startTime + 0.04);
-
-            } else if (type === 'win') {
-                [440, 554, 659, 880].forEach((freq, i) => {
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(freq, startTime + i * 0.08);
-                    gain.gain.setValueAtTime(0.1, startTime + i * 0.08);
-                    gain.gain.exponentialRampToValueAtTime(0.01, startTime + i * 0.08 + 0.3);
-                    osc.connect(gain);
-                    gain.connect(audioCtx.destination);
-                    osc.start(startTime + i * 0.08);
-                    osc.stop(startTime + i * 0.08 + 0.4);
-                });
-            }
-        }
-
-        function chrisRenderList() {
-            const listContainer = document.getElementById('chrisStatusList');
-            listContainer.innerHTML = '';
-            state.chris.breakfastItems.forEach((item, idx) => {
-                const isRemoved = !state.chris.availableIndices.includes(idx);
-                const span = document.createElement('div');
-                span.className = `option-tag px-3 py-1.5 rounded-full border text-xs font-bold flex items-center gap-2 ${isRemoved ? 'removed bg-gray-800/20 border-gray-800 text-gray-600' : 'bg-gray-800 border-gray-700 text-white'}`;
-                span.innerHTML = `<div class="w-2 h-2 rounded-full shadow-[0_0_5px_rgba(255,255,255,0.2)]" style="background-color: ${item.color}"></div>${item.text}`;
-                listContainer.appendChild(span);
-            });
-        }
-
-        function chrisMoveCube() {
-            const isRow = Math.random() > 0.5;
-            const index = Math.floor(Math.random() * 3);
-            const direction = Math.random() > 0.5 ? 1 : -1;
-
-            const cellElements = [];
-            if (isRow) {
-                for (let i = 0; i < 3; i++) cellElements.push(document.getElementById(`chris-cell-${index * 3 + i}`));
-            } else {
-                for (let i = 0; i < 3; i++) cellElements.push(document.getElementById(`chris-cell-${index + i * 3}`));
-            }
-
-            chrisPlaySound('tick');
-
-            cellElements.forEach(el => {
-                const moveVal = direction * 105;
-                el.style.transform = isRow ? `translateX(${moveVal}%)` : `translateY(${moveVal}%)`;
-            });
-
-            setTimeout(() => {
-                cellElements.forEach(el => {
-                    el.style.transition = 'none';
-                    el.style.transform = 'translate(0,0)';
-                    const randomItemIdx = Math.floor(Math.random() * state.chris.breakfastItems.length);
-                    el.style.backgroundColor = state.chris.breakfastItems[randomItemIdx].color;
-                    setTimeout(() => el.style.transition = 'transform 0.18s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s', 10);
-                });
-            }, 180);
-        }
-
-        function chrisStartSelection() {
-            if (state.chris.isProcessing || state.chris.availableIndices.length === 0) return;
-            state.chris.isProcessing = true;
-
-            let count = 0;
-            const maxMoves = 18;
-            const interval = setInterval(() => {
-                chrisMoveCube();
-                count++;
-                if (count >= maxMoves) {
-                    clearInterval(interval);
-                    setTimeout(chrisFinalizeSelection, 400);
-                }
-            }, 220);
-        }
-
-        function chrisFinalizeSelection() {
-            const luckyIdx = Math.floor(Math.random() * state.chris.availableIndices.length);
-            const itemIdx = state.chris.availableIndices[luckyIdx];
-            const result = state.chris.breakfastItems[itemIdx];
-
-            const cells = document.querySelectorAll('#chrisCubeGrid .cube-cell');
-            cells.forEach((cell, i) => {
-                cell.style.backgroundColor = result.color;
-                cell.style.boxShadow = `inset 0 0 20px rgba(0,0,0,0.5), 0 0 15px ${result.color}44`;
-                if (i === 4) cell.innerText = result.text;
-            });
-
-            state.chris.availableIndices.splice(luckyIdx, 1);
-
-            setTimeout(() => {
-                chrisShowResult(result);
-                chrisRenderList();
-                state.chris.isProcessing = false;
-            }, 700);
-        }
-
-        function chrisShowResult(item) {
-            const modal = document.getElementById('chrisModal');
-            document.getElementById('chrisResultText').innerText = item.text;
-            document.getElementById('chrisModalColorStrip').style.backgroundColor = item.color;
-            modal.classList.remove('hidden');
-            chrisPlaySound('win');
-            chrisCreateConfetti(item.color);
-        }
-
-        function chrisCloseModal() {
-            document.getElementById('chrisModal').classList.add('hidden');
-            const cells = document.querySelectorAll('#chrisCubeGrid .cube-cell');
-            const defaultColors = ['#DC2626', '#2563EB', '#16A34A', '#EA580C', '#CA8A04', '#F1F5F9', '#DC2626', '#2563EB', '#16A34A'];
-            cells.forEach((cell, i) => {
-                cell.style.backgroundColor = defaultColors[i];
-                cell.style.boxShadow = 'inset 0 0 12px rgba(0,0,0,0.5), 0 2px 4px rgba(0,0,0,0.3)';
-                cell.innerText = "";
-            });
-        }
-
-        function chrisResetOptions() {
-            state.chris.availableIndices = state.chris.breakfastItems.map((_, i) => i);
-            chrisRenderList();
-            chrisCloseModal();
-        }
-
-        function chrisCreateConfetti(color) {
-            for (let i = 0; i < 50; i++) {
-                const conf = document.createElement('div');
-                conf.className = 'confetti';
-                conf.style.left = '50vw';
-                conf.style.top = '50vh';
-                conf.style.backgroundColor = color;
-                conf.style.borderRadius = '2px';
-                document.body.appendChild(conf);
-                const angle = Math.random() * Math.PI * 2;
-                const dist = 100 + Math.random() * 250;
-                const tx = Math.cos(angle) * dist;
-                const ty = Math.sin(angle) * dist;
-                conf.animate([
-                    { transform: 'translate(0, 0) rotate(0deg)', opacity: 1 },
-                    { transform: `translate(${tx}px, ${ty}px) rotate(${Math.random() * 720}deg)`, opacity: 0 }
-                ], { duration: 1200 + Math.random() * 800, easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)' }).onfinish = () => conf.remove();
-            }
-        }
 
         // ========== Emma ==========
         function emmaDrawCat(ctx, x, y, size, breakfastType) {
@@ -1358,7 +1076,6 @@
         }
 
         // ========== Init ==========
-        chrisRenderList();
         emmaDrawWheel();
         emmaUpdateLists();
         showerInit();

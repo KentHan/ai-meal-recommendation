@@ -1,25 +1,25 @@
 import { getAudioCtx } from './shared/audio.js';
-// Feature imports — uncomment as each feature is migrated in later tasks.
-// import chris from './features/chris/index.js';
+import chris from './features/chris/index.js';
 // import emma from './features/emma/index.js';
 // import shower from './features/shower/index.js';
 
 const features = [
-    // chris, emma, shower
+    chris,
+    // emma, shower
 ];
 
 const toggleContainer = document.querySelector('.user-toggle');
 const appRoot = document.getElementById('app');
 
+// Static fallback list during incremental migration — Task 6 will replace this with `features`.
+const TOGGLE_LIST = [
+    { id: 'chris', label: 'Chris', emoji: '🧊' },
+    { id: 'emma', label: 'Emma', emoji: '🐱' },
+    { id: 'shower', label: '洗澡', emoji: '🛁' },
+];
+
 function renderToggle() {
-    const buttons = features.length
-        ? features
-        : [
-            { id: 'chris', label: 'Chris', emoji: '🧊' },
-            { id: 'emma', label: 'Emma', emoji: '🐱' },
-            { id: 'shower', label: '洗澡', emoji: '🛁' },
-        ];
-    toggleContainer.innerHTML = buttons.map(f =>
+    toggleContainer.innerHTML = TOGGLE_LIST.map(f =>
         `<button data-user-btn="${f.id}">${f.emoji} ${f.label}</button>`
     ).join('');
     toggleContainer.addEventListener('click', (e) => {

@@ -121,6 +121,7 @@ export default {
 
         const SCRAMBLE_LENGTH = 22;
         const SCRAMBLE_MS_PER = 80;
+        const POST_SCRAMBLE_PAUSE_MS = 3000;
         const SOLVE_MS_PER    = 320;
         const POST_SOLVE_PAUSE_MS = 400;
 
@@ -133,6 +134,8 @@ export default {
             try {
                 const scramble = randomScramble(SCRAMBLE_LENGTH);
                 await cube.playMoves(scramble, SCRAMBLE_MS_PER);
+
+                await new Promise(r => setTimeout(r, POST_SCRAMBLE_PAUSE_MS));
 
                 const solution = solveAfterScramble(scramble);
                 await cube.playMoves(solution, SOLVE_MS_PER);

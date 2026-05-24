@@ -20,7 +20,7 @@ const TEMPLATE = `
     <div class="cube-container mb-6" data-el="cubeWrap">
         <canvas data-el="cubeCanvas"></canvas>
     </div>
-    <p class="text-center text-gray-600 text-xs font-bold animate-bounce">點擊方塊啟動引擎！</p>
+    <p data-el="status" class="text-center text-gray-600 text-xs font-bold animate-bounce">點擊方塊啟動引擎！</p>
     <div data-el="modal" class="fixed inset-0 bg-black/95 flex items-center justify-center z-50 hidden p-6 backdrop-blur-md">
         <div class="bg-gray-900 border-2 border-blue-500 p-8 rounded-2xl text-center max-w-sm w-full shadow-[0_0_50px_rgba(59,130,246,0.3)]">
             <div data-el="modalColorStrip" class="h-2 w-16 mx-auto rounded-full mb-6"></div>
@@ -51,6 +51,7 @@ export default {
             statusList:      rootEl.querySelector('[data-el="statusList"]'),
             cubeWrap:        rootEl.querySelector('[data-el="cubeWrap"]'),
             cubeCanvas:      rootEl.querySelector('[data-el="cubeCanvas"]'),
+            status:          rootEl.querySelector('[data-el="status"]'),
             modal:           rootEl.querySelector('[data-el="modal"]'),
             modalColorStrip: rootEl.querySelector('[data-el="modalColorStrip"]'),
             resultText:      rootEl.querySelector('[data-el="resultText"]'),
@@ -117,6 +118,17 @@ export default {
                 span.innerHTML = `<div class="w-2 h-2 rounded-full shadow-[0_0_5px_rgba(255,255,255,0.2)]" style="background-color: ${item.color}"></div>${item.text}`;
                 els.statusList.appendChild(span);
             });
+        }
+
+        function setStatus(kind, current, total) {
+            if (kind === 'idle') {
+                els.status.textContent = '點擊方塊啟動引擎！';
+            } else if (kind === 'scrambling') {
+                els.status.textContent = '打亂中...';
+            } else if (kind === 'solving') {
+                els.status.textContent = `STEP ${current} / ${total}`;
+            }
+            els.status.classList.toggle('animate-bounce', kind === 'idle');
         }
 
         const SCRAMBLE_LENGTH = 22;

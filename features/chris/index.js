@@ -1,6 +1,7 @@
 import { MEALS } from '../../shared/data.js';
 import { getAudioCtx } from '../../shared/audio.js';
 import { createCube } from './cube3d.js';
+import { randomScramble, solveAfterScramble } from './solver.js';
 
 const PALETTE = ["#DC2626", "#16A34A", "#2563EB", "#CA8A04", "#EA580C"];
 
@@ -109,14 +110,35 @@ export default {
             });
         }
 
-        // Placeholder — replaced in Task 6 with real scramble+solve logic
-        function startSelection() {
+        const SCRAMBLE_LENGTH = 22;
+        const SCRAMBLE_MS_PER = 80;
+        const SOLVE_MS_PER    = 320;
+        const POST_SOLVE_PAUSE_MS = 400;
+
+        async function startSelection() {
             if (state.isProcessing || state.availableIndices.length === 0) return;
-            console.log('cube tap (placeholder)');
+            state.isProcessing = true;
+            playSound('tick');
+
+            const scramble = randomScramble(SCRAMBLE_LENGTH);
+            await cube.playMoves(scramble, SCRAMBLE_MS_PER);
+
+            const solution = solveAfterScramble(scramble);
+            await cube.playMoves(solution, SOLVE_MS_PER);
+
+            await new Promise(r => setTimeout(r, POST_SOLVE_PAUSE_MS));
+            finalizeSelection();
         }
 
-        // Placeholder — replaced in Task 6
-        function finalizeSelection() { /* replaced in Task 6 */ }
+        function finalizeSelection() {
+            const luckyIdx = Math.floor(Math.random() * state.availableIndices.length);
+            const itemIdx = state.availableIndices[luckyIdx];
+            const result = state.breakfastItems[itemIdx];
+            state.availableIndices.splice(luckyIdx, 1);
+            showResult(result);
+            renderList();
+            state.isProcessing = false;
+        }
 
         function showResult(item) {
             els.resultText.innerText = item.text;

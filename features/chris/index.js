@@ -131,7 +131,7 @@ export default {
             els.status.classList.toggle('animate-bounce', kind === 'idle');
         }
 
-        const SCRAMBLE_LENGTH = 22;
+        const SCRAMBLE_LENGTH = 15;
         const SCRAMBLE_MS_PER = 80;
         const POST_SCRAMBLE_PAUSE_MS = 3000;
         const SOLVE_MS_PER    = 320;

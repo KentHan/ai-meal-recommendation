@@ -1,8 +1,8 @@
 import { MEALS } from '../../shared/data.js';
 import { getAudioCtx } from '../../shared/audio.js';
+import { createCube } from './cube3d.js';
 
 const PALETTE = ["#DC2626", "#16A34A", "#2563EB", "#CA8A04", "#EA580C"];
-const DEFAULT_CELL_COLORS = ['#DC2626', '#2563EB', '#16A34A', '#EA580C', '#CA8A04', '#F1F5F9', '#DC2626', '#2563EB', '#16A34A'];
 
 const TEMPLATE = `
     <div class="text-center mb-8">
@@ -16,18 +16,8 @@ const TEMPLATE = `
         </div>
         <div data-el="statusList" class="flex flex-wrap gap-2 justify-center"></div>
     </div>
-    <div class="cube-container mb-6" data-el="cubeTrigger">
-        <div data-el="cubeGrid" class="cube-grid cursor-pointer">
-            <div class="cube-cell" style="background-color: #DC2626"></div>
-            <div class="cube-cell" style="background-color: #2563EB"></div>
-            <div class="cube-cell" style="background-color: #16A34A"></div>
-            <div class="cube-cell" style="background-color: #EA580C"></div>
-            <div class="cube-cell" style="background-color: #CA8A04"></div>
-            <div class="cube-cell" style="background-color: #F1F5F9"></div>
-            <div class="cube-cell" style="background-color: #DC2626"></div>
-            <div class="cube-cell" style="background-color: #2563EB"></div>
-            <div class="cube-cell" style="background-color: #16A34A"></div>
-        </div>
+    <div class="cube-container mb-6" data-el="cubeWrap">
+        <canvas data-el="cubeCanvas"></canvas>
     </div>
     <p class="text-center text-gray-600 text-xs font-bold animate-bounce">點擊方塊啟動引擎！</p>
     <div data-el="modal" class="fixed inset-0 bg-black/95 flex items-center justify-center z-50 hidden p-6 backdrop-blur-md">
@@ -48,20 +38,22 @@ export default {
         rootEl.innerHTML = TEMPLATE;
 
         const els = {
-            statusList: rootEl.querySelector('[data-el="statusList"]'),
-            cubeTrigger: rootEl.querySelector('[data-el="cubeTrigger"]'),
-            cubeGrid: rootEl.querySelector('[data-el="cubeGrid"]'),
-            modal: rootEl.querySelector('[data-el="modal"]'),
+            statusList:      rootEl.querySelector('[data-el="statusList"]'),
+            cubeWrap:        rootEl.querySelector('[data-el="cubeWrap"]'),
+            cubeCanvas:      rootEl.querySelector('[data-el="cubeCanvas"]'),
+            modal:           rootEl.querySelector('[data-el="modal"]'),
             modalColorStrip: rootEl.querySelector('[data-el="modalColorStrip"]'),
-            resultText: rootEl.querySelector('[data-el="resultText"]'),
+            resultText:      rootEl.querySelector('[data-el="resultText"]'),
         };
-        const cells = els.cubeGrid.querySelectorAll('.cube-cell');
 
         const state = {
             breakfastItems: MEALS.chris.map((text, i) => ({ text, color: PALETTE[i % PALETTE.length] })),
             availableIndices: MEALS.chris.map((_, i) => i),
             isProcessing: false,
         };
+
+        // Three.js cube (will throw if THREE missing — graceful fallback added in Task 7).
+        const cube = createCube(els.cubeCanvas);
 
         function playSound(type) {
             const ctx = getAudioCtx();
@@ -117,71 +109,14 @@ export default {
             });
         }
 
-        function moveCube() {
-            const isRow = Math.random() > 0.5;
-            const index = Math.floor(Math.random() * 3);
-            const direction = Math.random() > 0.5 ? 1 : -1;
-
-            const cellElements = [];
-            if (isRow) {
-                for (let i = 0; i < 3; i++) cellElements.push(cells[index * 3 + i]);
-            } else {
-                for (let i = 0; i < 3; i++) cellElements.push(cells[index + i * 3]);
-            }
-
-            playSound('tick');
-
-            cellElements.forEach(el => {
-                const moveVal = direction * 105;
-                el.style.transform = isRow ? `translateX(${moveVal}%)` : `translateY(${moveVal}%)`;
-            });
-
-            setTimeout(() => {
-                cellElements.forEach(el => {
-                    el.style.transition = 'none';
-                    el.style.transform = 'translate(0,0)';
-                    const randomItemIdx = Math.floor(Math.random() * state.breakfastItems.length);
-                    el.style.backgroundColor = state.breakfastItems[randomItemIdx].color;
-                    setTimeout(() => el.style.transition = 'transform 0.18s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s', 10);
-                });
-            }, 180);
-        }
-
+        // Placeholder — replaced in Task 6 with real scramble+solve logic
         function startSelection() {
             if (state.isProcessing || state.availableIndices.length === 0) return;
-            state.isProcessing = true;
-
-            let count = 0;
-            const maxMoves = 18;
-            const interval = setInterval(() => {
-                moveCube();
-                count++;
-                if (count >= maxMoves) {
-                    clearInterval(interval);
-                    setTimeout(finalizeSelection, 400);
-                }
-            }, 220);
+            console.log('cube tap (placeholder)');
         }
 
-        function finalizeSelection() {
-            const luckyIdx = Math.floor(Math.random() * state.availableIndices.length);
-            const itemIdx = state.availableIndices[luckyIdx];
-            const result = state.breakfastItems[itemIdx];
-
-            cells.forEach((cell, i) => {
-                cell.style.backgroundColor = result.color;
-                cell.style.boxShadow = `inset 0 0 20px rgba(0,0,0,0.5), 0 0 15px ${result.color}44`;
-                if (i === 4) cell.innerText = result.text;
-            });
-
-            state.availableIndices.splice(luckyIdx, 1);
-
-            setTimeout(() => {
-                showResult(result);
-                renderList();
-                state.isProcessing = false;
-            }, 700);
-        }
+        // Placeholder — replaced in Task 6
+        function finalizeSelection() { /* replaced in Task 6 */ }
 
         function showResult(item) {
             els.resultText.innerText = item.text;
@@ -193,11 +128,6 @@ export default {
 
         function closeModal() {
             els.modal.classList.add('hidden');
-            cells.forEach((cell, i) => {
-                cell.style.backgroundColor = DEFAULT_CELL_COLORS[i];
-                cell.style.boxShadow = 'inset 0 0 12px rgba(0,0,0,0.5), 0 2px 4px rgba(0,0,0,0.3)';
-                cell.innerText = "";
-            });
         }
 
         function resetOptions() {
@@ -226,7 +156,7 @@ export default {
             }
         }
 
-        els.cubeTrigger.addEventListener('click', startSelection);
+        els.cubeWrap.addEventListener('click', startSelection);  // temporary — replaced by pointer logic in Task 5
         rootEl.querySelector('[data-action="reset"]').addEventListener('click', resetOptions);
         rootEl.querySelector('[data-action="closeModal"]').addEventListener('click', closeModal);
 

@@ -156,7 +156,48 @@ export default {
             }
         }
 
-        els.cubeWrap.addEventListener('click', startSelection);  // temporary — replaced by pointer logic in Task 5
+        // Tap vs drag disambiguation.
+        const TAP_DISTANCE_PX = 8;
+        const TAP_DURATION_MS = 250;
+        let pointerDownAt = 0;
+        let pdX = 0, pdY = 0;
+        let lastX = 0, lastY = 0;
+        let dragging = false;
+        let totalDragDistance = 0;
+
+        els.cubeWrap.addEventListener('pointerdown', (e) => {
+            pointerDownAt = performance.now();
+            pdX = lastX = e.clientX;
+            pdY = lastY = e.clientY;
+            totalDragDistance = 0;
+            dragging = true;
+            els.cubeWrap.classList.add('dragging');
+            els.cubeWrap.setPointerCapture(e.pointerId);
+        });
+
+        els.cubeWrap.addEventListener('pointermove', (e) => {
+            if (!dragging) return;
+            const dx = e.clientX - lastX;
+            const dy = e.clientY - lastY;
+            totalDragDistance += Math.hypot(dx, dy);
+            lastX = e.clientX;
+            lastY = e.clientY;
+            if (totalDragDistance > TAP_DISTANCE_PX) {
+                cube.setIdleSpin(false);   // user took control of the camera
+                cube.orbitCamera(dx, dy);
+            }
+        });
+
+        els.cubeWrap.addEventListener('pointerup', (e) => {
+            const elapsed = performance.now() - pointerDownAt;
+            const dist = Math.hypot(e.clientX - pdX, e.clientY - pdY);
+            dragging = false;
+            els.cubeWrap.classList.remove('dragging');
+            els.cubeWrap.releasePointerCapture(e.pointerId);
+            if (dist < TAP_DISTANCE_PX && elapsed < TAP_DURATION_MS) {
+                startSelection();
+            }
+        });
         rootEl.querySelector('[data-action="reset"]').addEventListener('click', resetOptions);
         rootEl.querySelector('[data-action="closeModal"]').addEventListener('click', closeModal);
 

@@ -36,6 +36,14 @@ export function createCube(canvas) {
     }
     updateCamera();
 
+    function orbitCamera(dxPx, dyPx) {
+        camYaw   -= dxPx * 0.01;
+        camPitch += dyPx * 0.01;
+        // Clamp pitch to ~75° so user can't fly under/over the cube.
+        camPitch = Math.max(-1.3, Math.min(1.3, camPitch));
+        updateCamera();
+    }
+
     scene.add(new THREE.AmbientLight(0xffffff, 0.55));
     const keyLight = new THREE.DirectionalLight(0xffffff, 0.95);
     keyLight.position.set(5, 8, 6);
@@ -145,5 +153,6 @@ export function createCube(canvas) {
         setIdleSpin(on) { idleSpin = !!on; },
         rotateLayer,
         playMoves,
+        orbitCamera,
     };
 }

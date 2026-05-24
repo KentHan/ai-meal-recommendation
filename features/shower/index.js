@@ -195,6 +195,7 @@ export default {
             state.slots = [null, null, null, null];
             state.hasPlayed = false;
             clearResults();
+            generateRungs();
             drawLadder();
             renderPool();
             renderSlots();
@@ -419,7 +420,6 @@ export default {
             els.startBtn.disabled = true;
             els.startBtn.innerText = '爬格子中...🫧';
 
-            generateRungs();
             drawLadder(true);
             els.slots.querySelectorAll('.shower-piece').forEach(p => {
                 p.style.visibility = 'hidden';

@@ -1,12 +1,12 @@
 import { getAudioCtx } from './shared/audio.js';
 import chris from './features/chris/index.js';
 import emma from './features/emma/index.js';
-// import shower from './features/shower/index.js';
+import shower from './features/shower/index.js';
 
 const features = [
     chris,
     emma,
-    // shower
+    shower,
 ];
 
 const toggleContainer = document.querySelector('.user-toggle');

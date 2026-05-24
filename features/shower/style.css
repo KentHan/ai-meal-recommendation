@@ -1,0 +1,236 @@
+body[data-user="shower"] {
+    background: linear-gradient(180deg, #e0f2fe 0%, #bae6fd 100%);
+    font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+    padding: 1rem;
+    padding-top: 1.5rem;
+}
+
+.shower-container {
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 28px;
+    border: 4px solid #bae6fd;
+    padding: 18px;
+    box-shadow: 0 10px 30px rgba(56, 189, 248, 0.18);
+}
+.shower-title {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: #0284c7;
+    text-align: center;
+    letter-spacing: 2px;
+    margin-bottom: 2px;
+}
+.shower-subtitle {
+    font-size: 0.8rem;
+    color: #0ea5e9;
+    text-align: center;
+    margin-bottom: 14px;
+    font-weight: 600;
+}
+.shower-pool {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    min-height: 84px;
+    padding: 10px;
+    background: #f0f9ff;
+    border: 2px dashed #bae6fd;
+    border-radius: 16px;
+    margin-bottom: 8px;
+    transition: all 0.2s ease;
+}
+.shower-pool.drag-over {
+    background: #fef3c7;
+    border-color: #fbbf24;
+}
+.shower-pool-empty {
+    color: #94a3b8;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+.shower-slots {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+}
+.shower-slot {
+    height: 94px;
+    background: white;
+    border: 2px dashed #bae6fd;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    position: relative;
+    transition: all 0.2s ease;
+}
+.shower-slot.filled {
+    background: #f0f9ff;
+    border-style: solid;
+    border-color: #0ea5e9;
+}
+.shower-slot.drag-over {
+    background: #fef3c7;
+    border-color: #fbbf24;
+    transform: scale(1.04);
+}
+.shower-slot-num {
+    position: absolute;
+    top: 5px;
+    left: 8px;
+    font-size: 0.8rem;
+    font-weight: 900;
+    color: #94a3b8;
+    line-height: 1;
+}
+.shower-slot.filled .shower-slot-num { color: #0ea5e9; }
+.shower-slot-hint {
+    font-size: 0.7rem;
+    color: #94a3b8;
+    font-weight: 600;
+}
+.shower-piece {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+}
+.shower-piece:active { cursor: grabbing; }
+.shower-piece.dragging { opacity: 0.3; }
+.shower-piece-avatar, .shower-piece-avatar img {
+    -webkit-touch-callout: none;
+}
+.shower-piece-avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.3rem;
+    border: 3px solid white;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+    overflow: hidden;
+}
+.shower-piece-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+.shower-piece-name {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #475569;
+}
+.shower-drag-ghost {
+    position: fixed;
+    z-index: 1000;
+    pointer-events: none;
+    transition: none;
+}
+#showerLadder {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+.shower-start-btn {
+    width: 100%;
+    margin-top: 14px;
+    padding: 16px;
+    background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
+    color: white;
+    font-weight: 900;
+    font-size: 1.15rem;
+    border: none;
+    border-radius: 18px;
+    box-shadow: 0 6px 18px rgba(14, 165, 233, 0.4);
+    cursor: pointer;
+    touch-action: manipulation;
+    transition: all 0.2s ease;
+}
+.shower-start-btn:active { transform: scale(0.98); }
+.shower-start-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.shower-result-card {
+    margin-top: 14px;
+    padding: 14px;
+    background: #f0f9ff;
+    border-radius: 18px;
+    border: 2px solid #bae6fd;
+}
+.shower-result-title {
+    text-align: center;
+    font-weight: 900;
+    color: #0369a1;
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
+.shower-result-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    margin-bottom: 6px;
+    background: white;
+    border: 1px solid #e0f2fe;
+}
+.shower-result-row.rank-1 {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border: 2px solid #fbbf24;
+}
+.shower-rank-num {
+    font-weight: 900;
+    min-width: 28px;
+    text-align: center;
+    font-size: 1.1rem;
+    color: #0369a1;
+}
+.shower-result-row.rank-1 .shower-rank-num { color: #b45309; }
+.shower-result-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1rem;
+    border: 2px solid white;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+.shower-result-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.shower-result-name {
+    font-weight: 800;
+    color: #1e293b;
+}
+.shower-hint {
+    text-align: center;
+    color: #64748b;
+    font-size: 0.75rem;
+    margin-top: 8px;
+}

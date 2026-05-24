@@ -209,7 +209,6 @@ export default {
         let userTookOverCamera = false;
 
         els.cubeWrap.addEventListener('pointerdown', (e) => {
-            if (state.isProcessing) return;
             pointerDownAt = performance.now();
             pdX = lastX = e.clientX;
             pdY = lastY = e.clientY;
@@ -240,7 +239,7 @@ export default {
             dragging = false;
             els.cubeWrap.classList.remove('dragging');
             els.cubeWrap.releasePointerCapture(e.pointerId);
-            if (dist < TAP_DISTANCE_PX && elapsed < TAP_DURATION_MS) {
+            if (!state.isProcessing && dist < TAP_DISTANCE_PX && elapsed < TAP_DURATION_MS) {
                 startSelection();
             }
         });

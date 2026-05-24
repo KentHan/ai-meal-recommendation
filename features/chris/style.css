@@ -12,6 +12,12 @@ body[data-user="chris"] {
     }
 }
 
+.feature-root.chris-only {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .cube-container {
     width: min(300px, calc(100vw - 2.5rem));
     height: min(300px, calc(100vw - 2.5rem));

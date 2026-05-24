@@ -68,6 +68,49 @@ export function createCube(canvas) {
     }
     scene.add(cubeRoot);
 
+    // Returns the 9 cubies whose `axis` coordinate is approximately `layer`.
+    function getLayer(axis, layer) {
+        return cubies.filter(c => Math.round(c.position[axis]) === layer);
+    }
+
+    // Animate a face rotation. `axis` ∈ {'x','y','z'}, `layer` ∈ {-1,0,1}, `angle` in radians.
+    // Uses a temporary Group as pivot; THREE.attach preserves world transforms on reparent.
+    function rotateLayer(axis, layer, angle, durationMs) {
+        return new Promise(resolve => {
+            const group = getLayer(axis, layer);
+            const pivot = new THREE.Group();
+            scene.add(pivot);
+            group.forEach(c => pivot.attach(c));
+
+            const start = performance.now();
+            function tick() {
+                const t = Math.min(1, (performance.now() - start) / durationMs);
+                // cubic ease-in-out
+                const eased = t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 2)/2;
+                pivot.rotation[axis] = angle * eased;
+                if (t < 1) requestAnimationFrame(tick);
+                else {
+                    group.forEach(c => cubeRoot.attach(c));
+                    scene.remove(pivot);
+                    // Snap to integer positions to prevent float drift after many rotations.
+                    group.forEach(c => {
+                        c.position.x = Math.round(c.position.x);
+                        c.position.y = Math.round(c.position.y);
+                        c.position.z = Math.round(c.position.z);
+                    });
+                    resolve();
+                }
+            }
+            tick();
+        });
+    }
+
+    async function playMoves(moves, msPerMove) {
+        for (const m of moves) {
+            await rotateLayer(m.axis, m.layer, m.angle, msPerMove);
+        }
+    }
+
     function resize() {
         const parent = canvas.parentElement;
         const r = parent.getBoundingClientRect();
@@ -100,5 +143,7 @@ export function createCube(canvas) {
     return {
         resize,
         setIdleSpin(on) { idleSpin = !!on; },
+        rotateLayer,
+        playMoves,
     };
 }

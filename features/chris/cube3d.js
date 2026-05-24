@@ -113,9 +113,11 @@ export function createCube(canvas) {
         });
     }
 
-    async function playMoves(moves, msPerMove) {
-        for (const m of moves) {
+    async function playMoves(moves, msPerMove, onStep) {
+        for (let i = 0; i < moves.length; i++) {
+            const m = moves[i];
             await rotateLayer(m.axis, m.layer, m.angle, msPerMove);
+            onStep?.(i + 1, moves.length);
         }
     }
 

@@ -144,13 +144,15 @@ export default {
             playSound('tick');
 
             try {
+                setStatus('scrambling');
                 const scramble = randomScramble(SCRAMBLE_LENGTH);
                 await cube.playMoves(scramble, SCRAMBLE_MS_PER);
 
                 await new Promise(r => setTimeout(r, POST_SCRAMBLE_PAUSE_MS));
 
                 const solution = solveAfterScramble(scramble);
-                await cube.playMoves(solution, SOLVE_MS_PER);
+                setStatus('solving', 0, solution.length);
+                await cube.playMoves(solution, SOLVE_MS_PER, (i, total) => setStatus('solving', i, total));
 
                 await new Promise(r => setTimeout(r, POST_SOLVE_PAUSE_MS));
                 if (!userTookOverCamera) cube.setIdleSpin(true);  // resume idle unless user dragged
@@ -158,6 +160,7 @@ export default {
             } catch (err) {
                 console.error('cube selection failed:', err);
                 state.isProcessing = false;
+                setStatus('idle');
             }
         }
 
@@ -181,6 +184,7 @@ export default {
 
         function closeModal() {
             els.modal.classList.add('hidden');
+            setStatus('idle');
         }
 
         function resetOptions() {

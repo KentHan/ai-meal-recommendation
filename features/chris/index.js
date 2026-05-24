@@ -38,6 +38,15 @@ export default {
     mount(rootEl) {
         rootEl.innerHTML = TEMPLATE;
 
+        // Guard against CDN load failure — don't crash app.js's mount loop.
+        if (typeof window.THREE === 'undefined' || typeof window.Cube === 'undefined') {
+            const wrap = rootEl.querySelector('[data-el="cubeWrap"]');
+            if (wrap) {
+                wrap.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;color:#888;font-size:14px;font-weight:700;text-align:center;padding:20px">魔方載入失敗，<br>請重新整理</div>';
+            }
+            return;
+        }
+
         const els = {
             statusList:      rootEl.querySelector('[data-el="statusList"]'),
             cubeWrap:        rootEl.querySelector('[data-el="cubeWrap"]'),

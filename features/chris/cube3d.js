@@ -69,7 +69,8 @@ export function createCube(canvas) {
     scene.add(cubeRoot);
 
     function resize() {
-        const r = canvas.getBoundingClientRect();
+        const parent = canvas.parentElement;
+        const r = parent.getBoundingClientRect();
         const w = Math.max(1, Math.floor(r.width));
         const h = Math.max(1, Math.floor(r.height));
         renderer.setSize(w, h, true);

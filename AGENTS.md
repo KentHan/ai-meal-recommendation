@@ -54,4 +54,5 @@ export default {
 
 ## 資產
 
-- 頭像圖片（`chris.PNG`、`emma.JPG`、`lana.JPG`、`kent.jpeg`）與音效（`cat-meow.mp3`）都放 repo 根目錄，路徑相對 `index.html`。
+- 頭像圖片以 base64 data URI 內嵌在 `shared/data.js` 的 `AVATARS` 常數（避免 public repo 直接曝光照片）。要換頭像就改那個常數。
+- 音效（`cat-meow.mp3`）放 repo 根目錄，路徑相對 `index.html`。

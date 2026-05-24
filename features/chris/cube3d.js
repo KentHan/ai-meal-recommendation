@@ -76,6 +76,7 @@ export function createCube(canvas) {
         renderer.setSize(w, h, true);
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
+        renderer.render(scene, camera);
     }
 
     // First resize after layout; ResizeObserver added in later task.

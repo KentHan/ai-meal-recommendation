@@ -2,12 +2,12 @@
 // Expects window.THREE to be loaded.
 
 const COLORS = {
-    right:  0xDC2626,  // +x  red
-    left:   0xEA580C,  // -x  orange
-    top:    0xF1F5F9,  // +y  white
-    bottom: 0xCA8A04,  // -y  yellow
-    front:  0x16A34A,  // +z  green
-    back:   0x2563EB,  // -z  blue
+    right:  0xEF4444,  // +x  red    (Tailwind red-500)
+    left:   0xF97316,  // -x  orange (orange-500)
+    top:    0xFFFFFF,  // +y  white  (pure white)
+    bottom: 0xFACC15,  // -y  yellow (yellow-400)
+    front:  0x22C55E,  // +z  green  (green-500)
+    back:   0x3B82F6,  // -z  blue   (blue-500)
     inner:  0x0a0a0a,
 };
 

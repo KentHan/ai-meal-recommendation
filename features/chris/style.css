@@ -19,7 +19,7 @@ body[data-user="chris"] {
 }
 
 .cube-container {
-    width: min(300px, calc(100vw - 2.5rem));
+    width: min(240px, calc(100vw - 2.5rem));
     aspect-ratio: 1 / 1;
     background: #1a1a1a;
     border: 4px solid #333;

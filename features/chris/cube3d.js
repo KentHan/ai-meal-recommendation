@@ -12,7 +12,7 @@ const COLORS = {
 };
 
 const IDLE_YAW_PER_SEC = 0.04;          // ~ 8 sec / revolution
-const CAMERA_RADIUS    = 7.2;
+const CAMERA_RADIUS    = 10;
 const CAMERA_FOV       = 40;
 
 export function createCube(canvas) {

@@ -12,15 +12,8 @@ const features = [
 const toggleContainer = document.querySelector('.user-toggle');
 const appRoot = document.getElementById('app');
 
-// Static fallback list during incremental migration — Task 6 will replace this with `features`.
-const TOGGLE_LIST = [
-    { id: 'chris', label: 'Chris', emoji: '🧊' },
-    { id: 'emma', label: 'Emma', emoji: '🐱' },
-    { id: 'shower', label: '洗澡', emoji: '🛁' },
-];
-
 function renderToggle() {
-    toggleContainer.innerHTML = TOGGLE_LIST.map(f =>
+    toggleContainer.innerHTML = features.map(f =>
         `<button data-user-btn="${f.id}">${f.emoji} ${f.label}</button>`
     ).join('');
     toggleContainer.addEventListener('click', (e) => {
@@ -49,4 +42,4 @@ function mountFeatures() {
 
 renderToggle();
 mountFeatures();
-setUser(features[0]?.id ?? document.body.dataset.user ?? 'chris');
+setUser(document.body.dataset.user ?? features[0].id);

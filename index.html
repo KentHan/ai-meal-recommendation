@@ -11,23 +11,8 @@
     <link rel="stylesheet" href="features/shower/style.css">
 </head>
 <body data-user="chris">
-
-    <!-- User toggle (populated by app.js) -->
     <div class="user-toggle"></div>
-
-    <!-- Feature mount point (populated by app.js as features are migrated) -->
     <div id="app"></div>
-
-    <script src="meals.js"></script>
     <script type="module" src="app.js"></script>
-    <script>
-        // ========== Shared audio ==========
-        let audioCtx;
-        function initAudio() {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-        }
-
-    </script>
 </body>
 </html>

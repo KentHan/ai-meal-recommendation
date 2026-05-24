@@ -76,20 +76,29 @@ export function createCube(canvas) {
         renderer.setSize(w, h, true);
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
-        renderer.render(scene, camera);
     }
 
-    // First resize after layout; ResizeObserver added in later task.
+    // Observe the parent — its size changes with layout, the canvas's only changes when we set it.
+    const ro = new ResizeObserver(resize);
+    ro.observe(canvas.parentElement);
     requestAnimationFrame(resize);
 
-    function renderOnce() {
+    let idleSpin = true;
+    let lastFrameTs = performance.now();
+    function loop(now) {
+        const dt = (now - lastFrameTs) / 1000;
+        lastFrameTs = now;
+        if (idleSpin) {
+            camYaw += IDLE_YAW_PER_SEC * dt;
+            updateCamera();
+        }
         renderer.render(scene, camera);
+        requestAnimationFrame(loop);
     }
-    renderOnce();
+    requestAnimationFrame(loop);
 
     return {
-        renderOnce,
         resize,
-        // more methods added in later tasks
+        setIdleSpin(on) { idleSpin = !!on; },
     };
 }

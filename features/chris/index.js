@@ -118,16 +118,22 @@ export default {
         async function startSelection() {
             if (state.isProcessing || state.availableIndices.length === 0) return;
             state.isProcessing = true;
+            cube.setIdleSpin(false);  // animation will own the camera until we're done
             playSound('tick');
 
-            const scramble = randomScramble(SCRAMBLE_LENGTH);
-            await cube.playMoves(scramble, SCRAMBLE_MS_PER);
+            try {
+                const scramble = randomScramble(SCRAMBLE_LENGTH);
+                await cube.playMoves(scramble, SCRAMBLE_MS_PER);
 
-            const solution = solveAfterScramble(scramble);
-            await cube.playMoves(solution, SOLVE_MS_PER);
+                const solution = solveAfterScramble(scramble);
+                await cube.playMoves(solution, SOLVE_MS_PER);
 
-            await new Promise(r => setTimeout(r, POST_SOLVE_PAUSE_MS));
-            finalizeSelection();
+                await new Promise(r => setTimeout(r, POST_SOLVE_PAUSE_MS));
+                finalizeSelection();
+            } catch (err) {
+                console.error('cube selection failed:', err);
+                state.isProcessing = false;
+            }
         }
 
         function finalizeSelection() {
@@ -188,6 +194,7 @@ export default {
         let totalDragDistance = 0;
 
         els.cubeWrap.addEventListener('pointerdown', (e) => {
+            if (state.isProcessing) return;
             pointerDownAt = performance.now();
             pdX = lastX = e.clientX;
             pdY = lastY = e.clientY;
@@ -211,6 +218,7 @@ export default {
         });
 
         els.cubeWrap.addEventListener('pointerup', (e) => {
+            if (!dragging) return;
             const elapsed = performance.now() - pointerDownAt;
             const dist = Math.hypot(e.clientX - pdX, e.clientY - pdY);
             dragging = false;

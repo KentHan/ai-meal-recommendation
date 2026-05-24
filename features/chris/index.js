@@ -127,7 +127,7 @@ export default {
         async function startSelection() {
             if (state.isProcessing || state.availableIndices.length === 0) return;
             state.isProcessing = true;
-            cube.setIdleSpin(false);  // animation will own the camera until we're done
+            cube.setIdleSpin(false);  // pause idle so it doesn't fight the solve animation
             playSound('tick');
 
             try {
@@ -138,6 +138,7 @@ export default {
                 await cube.playMoves(solution, SOLVE_MS_PER);
 
                 await new Promise(r => setTimeout(r, POST_SOLVE_PAUSE_MS));
+                if (!userTookOverCamera) cube.setIdleSpin(true);  // resume idle unless user dragged
                 finalizeSelection();
             } catch (err) {
                 console.error('cube selection failed:', err);
@@ -201,6 +202,8 @@ export default {
         let lastX = 0, lastY = 0;
         let dragging = false;
         let totalDragDistance = 0;
+        // Once the user drags, idle auto-rotation stops for the session (their angle is preserved).
+        let userTookOverCamera = false;
 
         els.cubeWrap.addEventListener('pointerdown', (e) => {
             if (state.isProcessing) return;
@@ -221,7 +224,8 @@ export default {
             lastX = e.clientX;
             lastY = e.clientY;
             if (totalDragDistance > TAP_DISTANCE_PX) {
-                cube.setIdleSpin(false);   // user took control of the camera
+                userTookOverCamera = true;
+                cube.setIdleSpin(false);
                 cube.orbitCamera(dx, dy);
             }
         });

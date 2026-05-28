@@ -4,13 +4,18 @@ import { getAudioCtx } from '../../shared/audio.js';
 const ASSET_BASE = 'features/blackpink/assets';
 
 const MEMBERS = [
-    { id: 'jisoo',  label: 'Jisoo',  img: `${ASSET_BASE}/jisoo.png` },
+    { id: 'jisoo',  label: 'Jisoo',  img: `${ASSET_BASE}/jisoo.jpg` },
     { id: 'jennie', label: 'Jennie', img: `${ASSET_BASE}/jennie.jpg` },
     { id: 'rose',   label: 'Rosé',   img: `${ASSET_BASE}/rose.jpg` },
     { id: 'lisa',   label: 'Lisa',   img: `${ASSET_BASE}/lisa.jpg` },
+    { id: 'rora',   label: 'Rora',   img: `${ASSET_BASE}/rora.jpg` },
+    { id: 'ruka',   label: 'Ruka',   img: `${ASSET_BASE}/ruka.jpg` },
+    { id: 'shuhua', label: 'Shuhua', img: `${ASSET_BASE}/shuhua.jpg` },
+    { id: 'yuqi',   label: 'Yuqi',   img: `${ASSET_BASE}/yuqi.jpg` },
 ];
 
 const KUROMI_IMG = `${ASSET_BASE}/kuromi.png`;
+const SLOT_COUNT = 8;
 
 const TEMPLATE = `
     <div class="main-wrapper bp-wrap">
@@ -21,14 +26,14 @@ const TEMPLATE = `
                 <p class="bp-subtitle mb-6 text-sm md:text-base font-medium text-center">點兩下翻出今天的早餐～</p>
 
                 <div class="bp-card-grid" data-el="grid">
-                    ${MEMBERS.map((m, i) => `
+                    ${Array.from({ length: SLOT_COUNT }, (_, i) => `
                         <div class="bp-card" data-slot="${i}" data-state="idle">
                             <div class="bp-card-inner">
                                 <div class="bp-card-face bp-card-back">
                                     <img src="${KUROMI_IMG}" alt="Kuromi" draggable="false" />
                                 </div>
                                 <div class="bp-card-face bp-card-front">
-                                    <img src="${m.img}" alt="${m.label}" draggable="false" />
+                                    <img data-el="member-img-${i}" src="" alt="" draggable="false" />
                                     <div class="bp-meal-label" data-el="meal-${i}">—</div>
                                 </div>
                                 <div class="bp-empty-overlay">全部吃光了</div>
@@ -103,16 +108,27 @@ export default {
         const state = {
             deck: [],
             removed: [],
-            slots: MEMBERS.map(m => ({ member: m.id, breakfast: null, flip: 'idle' })),
+            slots: Array.from({ length: SLOT_COUNT }, () => ({ member: MEMBERS[0].id, breakfast: null, flip: 'idle' })),
             liftedIdx: -1,
             flippedIdx: -1,
             busy: false,
         };
 
+        function shuffledMemberIds() {
+            const pool = MEMBERS.map(m => m.id);
+            for (let i = pool.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [pool[i], pool[j]] = [pool[j], pool[i]];
+            }
+            return pool;
+        }
+
         function shuffleInit() {
             state.deck = [...MEALS.emma];
             state.removed = [];
+            const memberOrder = shuffledMemberIds();
             state.slots.forEach((s, i) => {
+                s.member = memberOrder[i];
                 drawInto(i, /*silent*/ true);
                 s.flip = 'idle';
             });
@@ -138,6 +154,12 @@ export default {
                 cardEl.dataset.state = slot.flip;
                 const mealEl = cardEl.querySelector(`[data-el="meal-${i}"]`);
                 mealEl.textContent = slot.breakfast ?? '—';
+                const member = MEMBERS.find(m => m.id === slot.member);
+                const imgEl = cardEl.querySelector(`[data-el="member-img-${i}"]`);
+                if (member && imgEl && imgEl.getAttribute('src') !== member.img) {
+                    imgEl.src = member.img;
+                    imgEl.alt = member.label;
+                }
             });
         }
 

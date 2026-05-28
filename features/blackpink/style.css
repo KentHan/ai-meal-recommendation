@@ -38,7 +38,7 @@ body[data-user="blackpink"] .bp-subtitle {
 body[data-user="blackpink"] .bp-card-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    gap: 16px;
     width: 100%;
     max-width: 560px;
     perspective: 1400px;
@@ -46,7 +46,11 @@ body[data-user="blackpink"] .bp-card-grid {
 }
 
 @media (min-width: 768px) {
-    body[data-user="blackpink"] .bp-card-grid { gap: 28px; }
+    body[data-user="blackpink"] .bp-card-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 22px;
+        max-width: 880px;
+    }
 }
 
 body[data-user="blackpink"] .bp-card {

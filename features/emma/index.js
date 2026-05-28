@@ -138,7 +138,7 @@ export default {
             selectedIndex: -1,
         };
 
-        const meowAudio = new Audio('cat-meow.mp3');
+        const meowAudio = new Audio('features/emma/assets/cat-meow.mp3');
         meowAudio.preload = 'auto';
         meowAudio.volume = 0.5;
 

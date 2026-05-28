@@ -15,11 +15,17 @@ body {
 }
 
 body[data-user="chris"] .emma-only,
-body[data-user="chris"] .shower-only { display: none !important; }
+body[data-user="chris"] .shower-only,
+body[data-user="chris"] .blackpink-only { display: none !important; }
 body[data-user="emma"]  .chris-only,
-body[data-user="emma"]  .shower-only { display: none !important; }
+body[data-user="emma"]  .shower-only,
+body[data-user="emma"]  .blackpink-only { display: none !important; }
 body[data-user="shower"] .chris-only,
-body[data-user="shower"] .emma-only { display: none !important; }
+body[data-user="shower"] .emma-only,
+body[data-user="shower"] .blackpink-only { display: none !important; }
+body[data-user="blackpink"] .chris-only,
+body[data-user="blackpink"] .emma-only,
+body[data-user="blackpink"] .shower-only { display: none !important; }
 
 /* ========== User toggle ========== */
 .user-toggle {
@@ -73,4 +79,16 @@ body[data-user="shower"] .user-toggle button.active {
     background: #0ea5e9;
     color: white;
     box-shadow: 0 4px 10px rgba(14, 165, 233, 0.4);
+}
+body[data-user="blackpink"] .user-toggle {
+    background: #0a0a0a;
+    border: 2px solid #ff2d87;
+    margin-top: 16px;
+    box-shadow: 0 4px 12px rgba(255, 45, 135, 0.35);
+}
+body[data-user="blackpink"] .user-toggle button { color: #ff8fbf; }
+body[data-user="blackpink"] .user-toggle button.active {
+    background: #ff2d87;
+    color: white;
+    box-shadow: 0 0 16px rgba(255, 45, 135, 0.6);
 }
